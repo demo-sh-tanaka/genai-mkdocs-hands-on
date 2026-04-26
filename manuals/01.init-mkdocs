@@ -18,12 +18,6 @@ uv sync
 uv run mkdocs serve --livereload
 ```
 
-## 5. PDFのビルド
-
-```bash
-RENDER_SVG=1 RENDER_PNG=1 ENABLE_PDF=1 uv run mkdocs build
-```
-
 ## MermaidのAIによる記述
 
 ```bash
@@ -33,3 +27,10 @@ RENDER_SVG=1 RENDER_PNG=1 ENABLE_PDF=1 uv run mkdocs build
  ```bash
  登場人物と役割が不明確なのでボックスによるスイムレーンを追加してアクターを明確にしてください。GitHub Actionsのようなシステムによる振る舞いもアクターとします。
  ```
+
+### SVGへ変換
+
+```bash
+RENDER_SVG=1 uv run mkdocs build
+```
+
