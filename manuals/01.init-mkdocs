@@ -34,8 +34,6 @@ uv run mkdocs serve --livereload
 ENABLE_PDF=1 uv run mkdocs build
 ```
 
-
-
 ```bash
 RENDER_SVG=1 ENABLE_PDF=1 uv run mkdocs build
 ```
