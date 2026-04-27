@@ -77,3 +77,6 @@ flowchart TB
 ※1 多くのチームでは PR 作者やレビュアーなど **書き込み権限＋ポリシー** を満たした人がマージします。  
 ※2 リモートのブランチ削除は、GitHub 上の「Delete branch」やリポジトリ設定に委ねる場合もあります。
 
+## SVG
+
+![GitFlow](gitflow.svg)
