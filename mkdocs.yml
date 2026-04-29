@@ -16,16 +16,6 @@ extra_javascript:
   - https://unpkg.com/mermaid/dist/mermaid.min.js
 
 markdown_extensions:
-  - attr_list
-  - admonition
-  - pymdownx.details
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-  - pymdownx.highlight
   - toc:
       permalink: true
 

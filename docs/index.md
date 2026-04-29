@@ -51,3 +51,17 @@ public void Hello() => Console.WriteLine("Hi");
 
 > 引用文です
 >> ネストした引用
+
+## Admonition
+
+!!! note
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
+    massa, nec semper lorem quam in massa.
+
+!!! danger
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod nulla.
+    Curabitur feugiat, tortor non consequat finibus, justo purus auctor massa, 
+    nec semper lorem quam in massa.
