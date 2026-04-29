@@ -13,3 +13,5 @@
     - [Cursor CLI](04.cursor.md)
     - [Codex CLI](05.codex.md)
     - [GitHub Copilot CLI](06.copilot.md)
+
+<!-- CI deploy preview test: 2026-04-29T08:00:19Z -->
