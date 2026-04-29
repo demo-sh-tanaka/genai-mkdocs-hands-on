@@ -35,7 +35,6 @@
 - [表示テキスト](https://github.com/genai-docs/genai-mkdocs-hands-on)
 - [ツールチップ付き](https://github.com/genai-docs/genai-mkdocs-hands-on "生成AI時代のドキュメント基盤")
 - [参照形式][ref]
-- [PDF](pdf/生成AI時代のドキュメント基盤.pdf)
 
 ![Altテキスト](https://picsum.photos/300/200)
 
@@ -52,11 +51,3 @@ public void Hello() => Console.WriteLine("Hi");
 
 > 引用文です
 >> ネストした引用
-
-## Admonition
-
-!!! note
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
-    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
-    massa, nec semper lorem quam in massa.
