@@ -1,0 +1,45 @@
+name: lint
+
+"on":
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+
+jobs:
+  textlint:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: lint-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.ref_name }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: pnpm をセットアップ
+        uses: pnpm/action-setup@v4
+
+      - name: Node.js をセットアップ
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+
+      - name: 依存パッケージを導入
+        shell: bash
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: textlint を実行
+        shell: bash
+        run: pnpm run lint:text
