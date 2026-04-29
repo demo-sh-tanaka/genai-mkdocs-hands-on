@@ -10,3 +10,6 @@ node_modules/**
 
 # スライド（Marp）はlint対象外
 docs/スライド/**
+
+# ハンズオンリソース
+reference/
