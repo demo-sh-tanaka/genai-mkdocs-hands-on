@@ -2,8 +2,6 @@
 title: Mermaid
 ---
 
-# Mermaid
-
 Mermaidはテキストベースで図を記述できるツールである。本プロジェクトでは推奨ツールとして位置づけている。
 
 ## 基本的な使い方
@@ -32,8 +30,6 @@ graph TD
     E --> F[終了]
 ```
 
-### 記法のポイント
-
 - `graph TD`: 上から下へ流れる図（Top to Down）
 - `graph LR`: 左から右へ流れる図（Left to Right）
 - `[テキスト]`: 四角形のノード
@@ -61,8 +57,6 @@ sequenceDiagram
     deactivate S
 ```
 
-### 記法のポイント
-
 - `participant`: 参加者を定義
 - `->>`: 同期メッセージ
 - `-->>`: 応答メッセージ
@@ -81,8 +75,6 @@ stateDiagram-v2
     レビュー中 --> 完了: 承認
     完了 --> [*]
 ```
-
-### 記法のポイント
 
 - `[*]`: 開始・終了状態
 - `状態名`: 状態を定義
@@ -114,8 +106,6 @@ classDiagram
     Document <|-- MarkdownDocument
     Document <|-- PdfDocument
 ```
-
-### 記法のポイント
 
 - `class クラス名`: クラスを定義
 - `+`: public
@@ -150,8 +140,6 @@ erDiagram
         int price
     }
 ```
-
-### 記法のポイント
 
 - `||--o{`: 1対多の関係
 - `||--|{`: 1対1以上の関係

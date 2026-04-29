@@ -1,5 +1,4 @@
 title: スライド
 nav:
-  - 一覧: index.md
-  - 生成AI時代のドキュメント基盤: genai-documentation-infrastructure.md
-  - Marp: marp.md
+  - Markdown: marp.md
+  - PDF: marp.pdf

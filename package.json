@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "uv sync && pnpm exec rulesync generate",
     "marp": "marp -s docs/スライド",
-    "marp:build": "marp --input-dir docs/スライド --output docs/スライド/dist --pdf --allow-local-files",
+    "marp:build": "marp --input-dir docs/スライド --output docs/スライド --html --allow-local-files",
     "mkdocs": "uv run mkdocs serve --livereload",
     "mkdocs:build": "RENDER_SVG=1 RENDER_PNG=1 ENABLE_PDF=1 uv run mkdocs build",
     "lint:text": "textlint README.md \"docs/**/*.md\"",
