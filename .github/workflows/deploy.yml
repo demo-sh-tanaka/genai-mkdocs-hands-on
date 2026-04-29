@@ -1,0 +1,168 @@
+name: deploy
+
+"on":
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+  id-token: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    if: >-
+      (github.event_name == 'push' || github.event_name == 'pull_request') &&
+      (github.event_name != 'pull_request' || github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.ref_name }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: MkDocs サイトをビルド
+        uses: ./.github/actions/build-mkdocs
+
+      - name: Azure にログイン
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: デプロイ
+        id: deploy
+        uses: nuitsjp/azure-blob-storage-site-deploy@main
+        with:
+          storage_account: ${{ vars.AZURE_STORAGE_ACCOUNT }}
+          source_dir: site
+          branch_name: ${{ github.head_ref || github.ref_name }}
+          pull_request_number: ${{ github.event.pull_request.number }}
+          action: deploy
+
+      - name: Workflow Summary にアクセスURLを出力
+        if: ${{ success() && steps.deploy.outputs.site_url != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          site_url="${{ steps.deploy.outputs.site_url }}"
+          {
+            echo "## 配置先URL"
+            echo
+            echo "- event: \`${GITHUB_EVENT_NAME}\`"
+            echo "- branch: \`${{ github.head_ref || github.ref_name }}\`"
+            if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+              echo "- PR: #${{ github.event.pull_request.number }}"
+            fi
+            echo "- URL: [${site_url}](${site_url})"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: PRコメントにステージングURLを投稿
+        if: ${{ success() && github.event_name == 'pull_request' && steps.deploy.outputs.site_url != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          pr_number="${{ github.event.pull_request.number }}"
+          site_url="${{ steps.deploy.outputs.site_url }}"
+          run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          comment_body="$(
+            printf '%s\n\n- ステージングURL: [%s](%s)\n- Workflow Run: [%s](%s)\n' \
+              'デプロイが完了しました。' \
+              "${site_url}" \
+              "${site_url}" \
+              "${run_url}" \
+              "${run_url}"
+          )"
+
+          gh api \
+            "repos/${GITHUB_REPOSITORY}/issues/${pr_number}/comments" \
+            --method POST \
+            --raw-field "body=${comment_body}" >/dev/null
+
+  deploy-release-latest:
+    if: >-
+      github.event_name == 'release' &&
+      github.event.release.prerelease == false &&
+      github.event.release.draft == false
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: deploy-release-latest
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: MkDocs サイトをビルド
+        uses: ./.github/actions/build-mkdocs
+
+      - name: Azure にログイン
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: デプロイ（release-latest）
+        id: deploy
+        uses: nuitsjp/azure-blob-storage-site-deploy@main
+        with:
+          storage_account: ${{ vars.AZURE_STORAGE_ACCOUNT }}
+          source_dir: site
+          is_latest_release: 'true'
+          action: deploy
+
+      - name: Workflow Summary にアクセスURLを出力
+        if: ${{ success() && steps.deploy.outputs.site_url != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          site_url="${{ steps.deploy.outputs.site_url }}"
+          {
+            echo "## 配置先URL（release-latest）"
+            echo
+            echo "- event: \`${GITHUB_EVENT_NAME}\`"
+            echo "- tag: \`${{ github.event.release.tag_name }}\`"
+            echo "- URL: [${site_url}](${site_url})"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  cleanup:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Azure にログイン
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: クリーンアップ
+        uses: nuitsjp/azure-blob-storage-site-deploy@main
+        with:
+          storage_account: ${{ vars.AZURE_STORAGE_ACCOUNT }}
+          pull_request_number: ${{ github.event.pull_request.number }}
+          action: cleanup
