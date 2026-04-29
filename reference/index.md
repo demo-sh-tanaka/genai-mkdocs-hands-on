@@ -1,3 +1,6 @@
+# 手順類
+
 ```bash
-cp -rf reference/99.result/docs/. docs/
+rm -rf docs
+cp -rf reference/99.result/docs docs
 ```
