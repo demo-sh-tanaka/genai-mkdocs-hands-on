@@ -12,4 +12,5 @@ node_modules/**
 docs/スライド/**
 
 # ハンズオンリソース
-reference/
+reference/**
+manuals/**
