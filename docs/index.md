@@ -69,3 +69,30 @@ https://squidfunk.github.io/mkdocs-material/reference/admonitions/?h=ad
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod nulla.
     Curabitur feugiat, tortor non consequat finibus, justo purus auctor massa, 
     nec semper lorem quam in massa.
+
+## Pull Requestレビューワークフロー
+
+```mermaid
+flowchart TD
+    subgraph 開発者
+        A[featureブランチを作成] --> B[コードを変更・コミット]
+        B --> C[リモートへプッシュ]
+        C --> D[Pull Requestを作成]
+        H[指摘事項を修正]
+    end
+    subgraph "GitHub Actions"
+        E[CIテスト実行] --> F{CI結果}
+    end
+    subgraph レビュアー
+        G[コードレビュー] --> I{レビュー結果}
+    end
+    subgraph GitHub
+        J[mainブランチへマージ] --> K[featureブランチを削除]
+    end
+    D --> E
+    F -->|成功| G
+    F -->|失敗| H
+    I -->|Approve| J
+    I -->|Request Changes| H
+    H --> B
+```
