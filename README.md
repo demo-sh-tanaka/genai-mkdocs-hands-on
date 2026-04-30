@@ -1,33 +1,5 @@
 # genai-mkdocs-hands-on
 
-## WSL で VS Code から利用する
-
-前提:
-
-- WSL 2
-- Docker Desktop または Docker Engine
-- VS Code
-- VS Code 拡張 `Dev Containers`
-
-手順:
-
-1. WSL でこのリポジトリーを開く。
-
-   ```bash
-   cd /path/to/genai-mkdocs-hands-on
-   code .
-   ```
-
-2. VS Code で `Reopen in Container` を実行する。
-3. 初回起動時は `.devcontainer/devcontainer.json` に従って依存関係が自動で導入される。
-4. プレビューを起動する。
-
-   ```bash
-   pnpm run mkdocs
-   ```
-
-5. ブラウザーで `http://127.0.0.1:8000/` を開く。
-
 ## ハンズオン手順
 
 1. [VS Code (code-server) の初期化](manuals/01.vscode.md)
@@ -47,3 +19,32 @@
 - [Cursor CLI](04.cursor.md)
 - [Codex CLI](05.codex.md)
 - [GitHub Copilot CLI](06.copilot.md)
+
+## WSL で VS Code から利用する
+
+前提:
+
+- WSL 2
+- Docker Desktop または Docker Engine
+- VS Code
+- VS Code 拡張 `Dev Containers`
+
+手順:
+
+1. WSLなどでこのリポジトリーをフォークし、クローンする
+
+   ```bash
+   cd ~
+   git clone https://github.com/your-username/genai-mkdocs-hands-on.git
+   ```
+
+2. WSL でこのリポジトリーを開く。
+
+   ```bash
+   cd genai-mkdocs-hands-on
+   code .
+   ```
+
+3. VS Code で `Reopen in Container` を実行する。
+4. 初回起動時は `.devcontainer/devcontainer.json` に従って依存関係が自動で導入される。
+
