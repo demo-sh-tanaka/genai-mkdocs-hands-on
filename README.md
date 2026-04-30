@@ -24,12 +24,11 @@
 
 前提:
 
-- WSL 2
-- Docker Desktop または Docker Engine
+- Dockerが利用できる環境
 - VS Code
 - VS Code 拡張 `Dev Containers`
 
-手順:
+手順（WSL）:
 
 1. WSLなどでこのリポジトリーをフォークし、クローンする
 
